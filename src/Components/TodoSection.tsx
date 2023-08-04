@@ -1,16 +1,11 @@
 import React from 'react'
 import TodoCard from './TodoCard'
-import { Todo } from '../pages/Main';
 import { styled } from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/config/configStore';
 
 interface TodoSectionProps {
-  
   isActive: boolean;
-  todos: Todo[];
-  onClickChange: (id: number) => void
-  onClickRemove: (id: number) => void
 }
 
 function TodoSection(props: TodoSectionProps) {

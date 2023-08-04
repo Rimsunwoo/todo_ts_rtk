@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import TodoSection from '../Components/TodoSection'
-
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../redux/config/configStore';
 import useInput from '../Hooks/useInput';
 import TodoForm from '../Components/TodoForm';
+import { addTodo } from '../redux/modules/todos';
 export interface Todo {
   id: number,
   title: string,
@@ -13,7 +15,7 @@ export interface Todo {
 
 
 function Main() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const dispatch:AppDispatch = useDispatch()
   const [titleValue,setTitleValue, onChangeTitleHandler] = useInput("");
   const [contentValue,setContentValue, onChangeContentHandler] = useInput("")
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,25 +30,12 @@ function Main() {
       content: contentValue,
       isDone: false
     }
-    setTodos([...todos, newTodo])
+    dispatch(addTodo(newTodo))
     setTitleValue("")
     setContentValue("")
   }
 
-  const onClickChange = (id: number) => {
-    const newTodo = todos.map(todo => {
-      if (todo.id === id) {
-        todo.isDone = !todo.isDone
-      }
-      return todo
-    })
-   setTodos(newTodo)
-  }
-
-  const onClickRemove = (id: number) => {
-    const newTodo = todos.filter(todo => todo.id !== id)
-    setTodos(newTodo)
-  }
+ 
 
   const FormProps = {
     titleValue,
@@ -54,13 +43,12 @@ function Main() {
     onSubmitHandler,
     onChangeTitleHandler,
     onChangeContentHandler,
-    onClickChange
   }
   return (
     <>
       <TodoForm FormProps={FormProps} />
-      <TodoSection isActive={true} onClickChange={onClickChange} onClickRemove={onClickRemove} />
-      <TodoSection isActive={false} onClickChange={onClickChange} onClickRemove={onClickRemove} />
+      <TodoSection isActive={true}  />
+      <TodoSection isActive={false} />
       </>
   )
 }
